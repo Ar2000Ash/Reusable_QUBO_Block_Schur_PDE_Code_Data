@@ -1,0 +1,40 @@
+{
+  "problem": "burgers_1d",
+  "B": 2,
+  "M": 1,
+  "K": 10,
+  "matrix_shape": [
+    20,
+    20
+  ],
+  "matrix_condition": 1.0697444204176292,
+  "rel_l2_vs_exact": 8.693407918071512e-05,
+  "linf_vs_exact": 6.964069441484089e-05,
+  "rel_l2_vs_precise_numeric": 8.764191726908332e-06,
+  "linf_vs_precise_numeric": 8.554321736076176e-06,
+  "linear_residual_inf_final": 8.602621005160405e-06,
+  "least_squares_scale_solution_to_precise": 1.0000065916033847,
+  "correlation_solution_precise": 0.9999999999833193,
+  "reference_mode_2d": null,
+  "continuous_discrete_truncation_residual_inf": null,
+  "continuous_discrete_truncation_residual_rel": null,
+  "cache_info": {
+    "block_size": 2,
+    "n_blocks": 10,
+    "used_qubo": true,
+    "precompute_time_sec": 21.486513835999972,
+    "max_inverse_residual": 4.6137321622797074e-07,
+    "mean_inverse_residual": 4.6104357414149166e-07,
+    "max_schur_cond": 1.034674851427069
+  },
+  "qubo_stats": {
+    "calls": 80,
+    "columns_solved_by_qubo": 80,
+    "columns_solved_classically": 0,
+    "total_candidates_evaluated": 1342177280,
+    "total_qubo_time_sec": 21.468915471999935,
+    "max_bits_seen": 24,
+    "min_best_energy": 8.258594195244756e-14,
+    "max_best_energy": 1.1404527367503242e-07
+  }
+}

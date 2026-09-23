@@ -1,0 +1,40 @@
+{
+  "problem": "helmholtz_2d",
+  "B": 2,
+  "M": 1,
+  "K": 10,
+  "matrix_shape": [
+    20,
+    20
+  ],
+  "matrix_condition": 50.21037880064371,
+  "rel_l2_vs_exact": 0.00018759084307709827,
+  "linf_vs_exact": 0.00017833656602772585,
+  "rel_l2_vs_precise_numeric": 0.00018759084307613292,
+  "linf_vs_precise_numeric": 0.00017833656602717074,
+  "linear_residual_inf_final": 0.011230030535935853,
+  "least_squares_scale_solution_to_precise": 0.999955839239859,
+  "correlation_solution_precise": 0.9999999833784564,
+  "reference_mode_2d": "discrete_manufactured",
+  "continuous_discrete_truncation_residual_inf": 1.6048685801218667,
+  "continuous_discrete_truncation_residual_rel": 0.016746913917778484,
+  "cache_info": {
+    "block_size": 2,
+    "n_blocks": 10,
+    "used_qubo": true,
+    "precompute_time_sec": 21.03438833399997,
+    "max_inverse_residual": 0.00015288349482422956,
+    "mean_inverse_residual": 9.093582824544411e-05,
+    "max_schur_cond": 1.33410299355095
+  },
+  "qubo_stats": {
+    "calls": 80,
+    "columns_solved_by_qubo": 80,
+    "columns_solved_classically": 0,
+    "total_candidates_evaluated": 1342177280,
+    "total_qubo_time_sec": 21.01517377199974,
+    "max_bits_seen": 24,
+    "min_best_energy": 3.644329204288646e-10,
+    "max_best_energy": 1.1565834781090524e-07
+  }
+}

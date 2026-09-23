@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+message: "If you use this code or data package, please cite this repository and the associated publication when available."
+title: "Reusable QUBO Block-Schur PDE Solvers: Code and Data"
+type: software
+authors:
+  - family-names: "Fath Lipaei"
+    given-names: "Arash"
+  - family-names: "Müstecaplıoğlu"
+    given-names: "Özgür E."
+  - family-names: "Salehi"
+    given-names: "Ozlem"
+  - family-names: "Aslan"
+    given-names: "Selin"
+version: "1.1.0"
+date-released: "2026-09-23"
