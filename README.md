@@ -9,6 +9,8 @@ sha256sum -c SHA256SUMS.txt
 python analysis/build_processed_data.py
 python analysis/verify_results.py
 python analysis/check_dirac3_decode.py
+python analysis/check_qci_input_qubos.py
+python analysis/reconstruct_dirac3_pde.py --write
 python analysis/verify_qci_recovery.py
 ```
 
