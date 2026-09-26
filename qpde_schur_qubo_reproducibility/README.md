@@ -179,6 +179,22 @@ serif/STIX fallback otherwise.  The source data for each panel are documented in
 
 ---
 
+## Hardware signed-decoding correction
+
+A documented correction to derived signed fixed-point decoded values and residuals
+is archived in [the Dirac-3 correction note](docs/DIRAC3_DECODING_CORRECTION.md).
+Pre-correction snapshots are retained under `data/provenance/pre_fix_signed_decode/`.
+All original bitstrings, job identifiers, normalized submitted objectives and sample
+counts remain unchanged. Run the independent re-decoding audit:
+
+```bash
+python analysis/check_dirac3_decode.py
+```
+
+The original normalized QUBO coefficient input files referenced by the hardware
+job records are not included in this release and are tracked as a separate
+provenance/reproducibility gap.
+
 ## Integrity checks
 
 ```bash
