@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - audit/fix-dirac3-signed-decode
+      - audit/direct-qubos-pde-rebuild
   pull_request:
   workflow_dispatch:
 
@@ -30,6 +31,10 @@ jobs:
         run: python -m compileall -q src experiments analysis
       - name: Verify archived SHA256 checksums
         run: sha256sum -c SHA256SUMS.txt
+      - name: Verify 34 directly accessible reconstructed input QUBOs
+        run: python analysis/check_qci_input_qubos.py
+      - name: Reconstruct the three terminal PDE fields independently
+        run: python analysis/reconstruct_dirac3_pde.py
       - name: Rebuild processed datasets
         run: python analysis/build_processed_data.py
       - name: Independently verify all Dirac-3 decoded bitstrings

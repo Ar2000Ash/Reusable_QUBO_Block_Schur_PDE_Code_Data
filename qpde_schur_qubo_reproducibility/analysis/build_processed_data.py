@@ -14,6 +14,8 @@ from __future__ import annotations
 from pathlib import Path
 import shutil
 
+from reconstruct_dirac3_pde import regenerate
+
 import numpy as np
 import pandas as pd
 
@@ -141,10 +143,14 @@ def build_dirac3() -> None:
     """Create the hardware-audit and end-to-end reconstruction CSVs."""
     raw = RAW / "dirac3"
 
-    # The three plotted solution files are direct archival outputs.
-    heat = pd.read_csv(raw / "heat_solution.csv")
-    poisson = pd.read_csv(raw / "poisson_solution.csv")
-    kg = pd.read_csv(raw / "klein_gordon_solution.csv")
+    # Independently reconstruct all hardware-selected terminal PDE fields from
+    # the archived Schur blocks and original returned 24-bit bitstrings.
+    # The archive's dense terminal field defines b=A@u_ref; full transient
+    # forcing/BC histories were not recovered and are not claimed here.
+    independent = regenerate(raw=raw, out=OUT, write=True, strict=True)
+    heat = independent["fields"]["dirac_heat.csv"]
+    poisson = independent["fields"]["dirac_poisson.csv"]
+    kg = independent["fields"]["dirac_kg.csv"]
     _write(heat, "dirac_heat.csv")
     _write(poisson, "dirac_poisson.csv")
     _write(kg, "dirac_kg.csv")
@@ -200,7 +206,7 @@ def build_dirac3() -> None:
     _write(mapped, "dirac_mapped.csv")
 
     # Aggregate local hardware quality and merge the end-to-end PDE reconstruction.
-    pde_solution = pd.read_csv(raw / "pde_reconstruction_summary.csv").set_index("pde")
+    pde_solution = independent["summary"].set_index("pde")
     rows: list[dict[str, object]] = []
     for pde_name, group in audit.groupby("pde_name", sort=False):
         solution_row = pde_solution.loc[pde_name]
