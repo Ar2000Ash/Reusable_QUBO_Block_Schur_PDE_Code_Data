@@ -6,6 +6,7 @@ README.md
 VERSION
 analysis/audit_dirac3.py
 analysis/build_processed_data.py
+analysis/check_dirac3_decode.py
 analysis/generate_figures.py
 analysis/verify_results.py
 data/README.md
@@ -24,6 +25,11 @@ data/processed/fixed_plot.csv
 data/processed/fixed_validation.csv
 data/processed/k_sweep_compact.csv
 data/processed/largeB.csv
+data/provenance/pre_fix_signed_decode/README.md
+data/provenance/pre_fix_signed_decode/processed_dirac_mapped.csv
+data/provenance/pre_fix_signed_decode/raw_reconstructed_60_instances.csv
+data/provenance/pre_fix_signed_decode/raw_returned_samples.csv
+data/provenance/pre_fix_signed_decode/raw_unique_jobs.csv
 data/raw/b8_optimizer/full_cached_solve_summary.csv
 data/raw/b8_optimizer/full_greedy_polish_all_inverse_columns.csv
 data/raw/b8_optimizer/optimizer_summary_by_method.csv
@@ -76,6 +82,7 @@ data/raw/k_sweep/convergence_slopes.csv
 data/raw/k_sweep/k_sweep_results.csv
 data/raw/large_block/largeB_poisson_lineblock_summary.csv
 docs/DATA_DICTIONARY.md
+docs/DIRAC3_DECODING_CORRECTION.md
 docs/EXPERIMENTS.md
 docs/FIGURES.md
 docs/HARDWARE_AUDIT.md
