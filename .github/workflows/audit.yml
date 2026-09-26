@@ -1,0 +1,43 @@
+name: Verify corrected QPDE computational archive
+
+on:
+  push:
+    branches:
+      - audit/fix-dirac3-signed-decode
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  numerical-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: qpde_schur_qubo_reproducibility
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: qpde_schur_qubo_reproducibility/requirements.txt
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Compile Python sources
+        run: python -m compileall -q src experiments analysis
+      - name: Verify archived SHA256 checksums
+        run: sha256sum -c SHA256SUMS.txt
+      - name: Rebuild processed datasets
+        run: python analysis/build_processed_data.py
+      - name: Independently verify all Dirac-3 decoded bitstrings
+        run: python analysis/check_dirac3_decode.py
+      - name: Verify numerical summaries
+        run: python analysis/verify_results.py
+      - name: Audit archived hardware records
+        run: python analysis/audit_dirac3.py
+      - name: Regenerate all result figures
+        run: python analysis/generate_figures.py
+      - name: Re-run large-block experiment
+        run: python experiments/run_large_block.py --output /tmp/qpde_large_block_summary.csv
