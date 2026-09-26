@@ -11,12 +11,14 @@ from __future__ import annotations
 from pathlib import Path
 
 import pandas as pd
+from check_dirac3_decode import check_archive
 
 ROOT = Path(__file__).resolve().parents[1]
 RAW = ROOT / "data" / "raw" / "dirac3"
 
 
 def main() -> None:
+    check_archive()
     mapped = pd.read_csv(RAW / "mapped_60_instances.csv")
     unique = pd.read_csv(RAW / "unique_jobs.csv")
     samples = pd.read_csv(RAW / "returned_samples.csv")

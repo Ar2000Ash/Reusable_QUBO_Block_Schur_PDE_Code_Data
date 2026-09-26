@@ -13,6 +13,7 @@ import math
 
 import numpy as np
 import pandas as pd
+from check_dirac3_decode import check_archive
 
 ROOT = Path(__file__).resolve().parents[1]
 RAW = ROOT / "data" / "raw"
@@ -99,6 +100,7 @@ def main() -> None:
     check_large_block()
     check_b8_optimizer()
     check_dirac3()
+    check_archive()
     print("All archived-result consistency checks passed.")
 
 
