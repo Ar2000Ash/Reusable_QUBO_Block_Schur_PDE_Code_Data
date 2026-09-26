@@ -195,6 +195,10 @@ The original normalized QUBO coefficient input files referenced by the hardware
 job records are not included in this release and are tracked as a separate
 provenance/reproducibility gap.
 
+## Original hardware source and reconstructed input QUBOs
+
+The recovered original author preprocessing CSVs and the full saved 34-job QCI device-response JSONL, plus an independently audited 34-input mathematical QUBO reconstruction and corrected offline postprocessing, are preserved in [the dated recovery archive](data/provenance/qci_reconstruction_2026_09_26/README.md). The archive contains original unmodified sources and labels reconstructed coefficient CSVs with `RECONSTRUCTED_`. The original uploaded polynomial-file *bytes* are not recovered: none of the 34 reconstructed CSV hashes matches its historical term hash. Run `python analysis/verify_qci_recovery.py` to reconstruct and audit everything without contacting the device. This is a separate source-level test from the legacy published-result checks.
+
 ## Integrity checks
 
 ```bash

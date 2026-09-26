@@ -8,6 +8,7 @@ analysis/audit_dirac3.py
 analysis/build_processed_data.py
 analysis/check_dirac3_decode.py
 analysis/generate_figures.py
+analysis/verify_qci_recovery.py
 analysis/verify_results.py
 data/README.md
 data/processed/b8_full_solve.csv
@@ -30,6 +31,16 @@ data/provenance/pre_fix_signed_decode/processed_dirac_mapped.csv
 data/provenance/pre_fix_signed_decode/raw_reconstructed_60_instances.csv
 data/provenance/pre_fix_signed_decode/raw_returned_samples.csv
 data/provenance/pre_fix_signed_decode/raw_unique_jobs.csv
+data/provenance/qci_reconstruction_2026_09_26/README.md
+data/provenance/qci_reconstruction_2026_09_26/parts/recovery.zip.part00
+data/provenance/qci_reconstruction_2026_09_26/parts/recovery.zip.part01
+data/provenance/qci_reconstruction_2026_09_26/parts/recovery.zip.part02
+data/provenance/qci_reconstruction_2026_09_26/parts/recovery.zip.part03
+data/provenance/qci_reconstruction_2026_09_26/parts/recovery.zip.part04
+data/provenance/qci_reconstruction_2026_09_26/parts/recovery.zip.part05
+data/provenance/qci_reconstruction_2026_09_26/parts/recovery.zip.part06
+data/provenance/qci_reconstruction_2026_09_26/parts/recovery.zip.part07
+data/provenance/qci_reconstruction_2026_09_26/parts/recovery.zip.part08
 data/raw/b8_optimizer/full_cached_solve_summary.csv
 data/raw/b8_optimizer/full_greedy_polish_all_inverse_columns.csv
 data/raw/b8_optimizer/optimizer_summary_by_method.csv

@@ -54,10 +54,10 @@ def independent_evaluation(row: pd.Series, bitstring: str) -> tuple[np.ndarray, 
 
 
 def check_archive() -> None:
-    reconstructed = pd.read_csv(RAW / "reconstructed_60_instances.csv")
-    samples = pd.read_csv(RAW / "returned_samples.csv")
-    unique = pd.read_csv(RAW / "unique_jobs.csv")
-    mapped = pd.read_csv(RAW / "mapped_60_instances.csv")
+    reconstructed = pd.read_csv(RAW / "reconstructed_60_instances.csv", dtype={"global_min_bitstring": str, "hw_best_bitstring": str, "hw_exact_bitstring": str})
+    samples = pd.read_csv(RAW / "returned_samples.csv", dtype={"bitstring": str})
+    unique = pd.read_csv(RAW / "unique_jobs.csv", dtype={"best_bitstring": str, "exact_bitstring": str})
+    mapped = pd.read_csv(RAW / "mapped_60_instances.csv", dtype={"dirac_bitstring": str, "exact_bitstring": str})
     processed = pd.read_csv(PROCESSED / "dirac_mapped.csv")
 
     assert len(reconstructed) == len(mapped) == len(processed) == 60

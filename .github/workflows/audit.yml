@@ -41,3 +41,5 @@ jobs:
         run: python analysis/generate_figures.py
       - name: Re-run large-block experiment
         run: python experiments/run_large_block.py --output /tmp/qpde_large_block_summary.csv
+      - name: Verify original QCI raw responses and reconstructed pre/post-processing
+        run: python analysis/verify_qci_recovery.py
