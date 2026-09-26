@@ -3,6 +3,7 @@ name: Verify corrected QPDE computational archive
 on:
   push:
     branches:
+      - main
       - audit/fix-dirac3-signed-decode
   pull_request:
   workflow_dispatch:
