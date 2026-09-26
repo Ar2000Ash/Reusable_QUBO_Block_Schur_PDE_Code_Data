@@ -39,8 +39,11 @@ def equal_numeric(actual: object, expected: float, label: str) -> None:
 
 def independent_evaluation(row: pd.Series, bitstring: str) -> tuple[np.ndarray, float, float]:
     """Return decoded vector, least-squares residual, constant-free submitted energy."""
-    if len(bitstring) != 24 or any(c not in "01" for c in bitstring):
-        raise AssertionError(f"{row.qci_id}: invalid 24-bit string {bitstring!r}")
+    # pandas may infer a bitstring column as integer and strip leading zeroes.
+    # Restoring the fixed-width representation is safe only for binary digits.
+    if not bitstring or len(bitstring) > 24 or any(c not in "01" for c in bitstring):
+        raise AssertionError(f"{row.qci_id}: invalid binary string {bitstring!r}")
+    bitstring = bitstring.zfill(24)
     bits = np.fromiter((int(c) for c in bitstring), dtype=np.int8, count=24)
     y = decode_bits(bits, float(row.gamma), LAYOUT)
     S = np.array([[row.S00, row.S01], [row.S10, row.S11]], dtype=float)
