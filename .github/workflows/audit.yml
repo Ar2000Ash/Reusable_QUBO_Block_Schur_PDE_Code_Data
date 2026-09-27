@@ -6,6 +6,8 @@ on:
       - main
       - audit/fix-dirac3-signed-decode
       - audit/direct-qubos-pde-rebuild
+      - reconstruction/exact-oracle-five-pde-stage1
+      - reconstruction/fixed-paper-scales-figure3
   pull_request:
   workflow_dispatch:
 
@@ -49,3 +51,23 @@ jobs:
         run: python experiments/run_large_block.py --output /tmp/qpde_large_block_summary.csv
       - name: Verify original QCI raw responses and reconstructed pre/post-processing
         run: python analysis/verify_qci_recovery.py
+      - name: Independently reconstruct Figure 2 from all 14 source experiment rows and slopes
+        run: python experimental_reconstruction/tests/check_figure2.py
+      - name: Audit explicit Figure 3 auto-bound and correction-scale hypotheses
+        run: python experimental_reconstruction/src/figure3_scale_audit.py
+      - name: Check Figure 3 first-block energy constraints and nonhistorical replacement
+        run: |
+          python experimental_reconstruction/src/figure3_initial_scale_constraints.py
+          python experimental_reconstruction/tests/check_figure3_refinement_replacement.py
+          python experimental_reconstruction/src/figure3_refinement_replacement.py
+      - name: Verify new fixed-paper-scale Figure 3 source, boundaries and manuscript outputs
+        run: |
+          python experimental_reconstruction/tests/check_figure3_fixed_paper_scales.py
+          python experimental_reconstruction/tests/check_figure3_committed_outputs.py
+      - name: Independently verify reconstructed oracle and five-PDE boundary fingerprints
+        run: |
+          python experimental_reconstruction/tests/check_oracle.py
+          python experimental_reconstruction/tests/check_archived_qci.py
+          python experimental_reconstruction/tests/check_boundaries.py
+          python experimental_reconstruction/tests/check_torch_full.py
+          python experimental_reconstruction/tests/compare_results.py

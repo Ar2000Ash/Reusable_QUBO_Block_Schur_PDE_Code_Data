@@ -19,3 +19,7 @@ The [2026-09-26 original QCI source recovery](qpde_schur_qubo_reproducibility/da
 The independent [GitHub Actions audit](.github/workflows/audit.yml) runs the preprocessing, decoding, numerical checks, result figures, large-block experiment and raw-QCI reconstruction verification. The historical exact 24-bit enumeration driver and complete original PDE driver remain unarchived; consult project documentation for the precise reproducibility boundary.
 
 The repository has no explicit software license yet. Copyrighted code is provided for review and reproducibility, but no open-source license is implied.
+
+## Independently rerun fixed-scale Figure 3
+
+A new fixed-paper-scale five-PDE benchmark and manuscript replacement, with all three correction passes explicitly logged, is available under [experimental_reconstruction](qpde_schur_qubo_reproducibility/experimental_reconstruction/docs/FIGURE3_FIXED_SCALE_PROTOCOL.md). Its [Figure 3](qpde_schur_qubo_reproducibility/experimental_reconstruction/figures/figure3_fixed_paper_scales.svg) and [new Table 3](qpde_schur_qubo_reproducibility/experimental_reconstruction/outputs/figure3_fixed_paper_scales.csv) are fresh **CPU-exact reduced-grid** measurements. The original archived `auto_bound` results remain untouched. With unchanged nominal scales all 360 residual-correction solves return zero; no refinement gain or new GPU timings are claimed.
