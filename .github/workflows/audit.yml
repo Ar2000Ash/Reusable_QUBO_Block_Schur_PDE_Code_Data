@@ -7,6 +7,7 @@ on:
       - audit/fix-dirac3-signed-decode
       - audit/direct-qubos-pde-rebuild
       - reconstruction/exact-oracle-five-pde-stage1
+      - reconstruction/fixed-paper-scales-figure3
   pull_request:
   workflow_dispatch:
 
