@@ -1,0 +1,2 @@
+numpy>=1.24,<3
+# Optional for full-bitspace CPU/CUDA enumeration: torch with appropriate build
