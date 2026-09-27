@@ -39,3 +39,9 @@ one or two aggregate metrics is insufficient to call it the original protocol.
 
 The CUDA implementation in `src/exact_oracle.py` is still untested on a real CUDA
 device; run `python experimental_reconstruction/run_driver.py oracle --id QCI-001 --backend cuda --chunk-power 16` first on a CUDA-equipped machine.
+
+## Stronger necessary-condition audit
+
+[`src/figure3_initial_scale_constraints.py`](../src/figure3_initial_scale_constraints.py) independently minimizes the *first* inverse-column QUBOs, which are independent of any later Schur recursion. The archived global maximum of all solved QUBO energies must be at least this first-block minimum. That condition excludes the nominal `FIXED_GAMMA=0.01` as the actual first-block initial scale for both Poisson and Helmholtz. Direct unmodified Equation (22) scale is also excluded for Poisson (and for Klein–Gordon under its inverse-norm fallback), under the archived energy definition. The numeric feasibility scan shows multiple admissible gamma samples, so the recorded maximum does **not** uniquely recover the historical scale. No fitting or retroactive editing of data is involved.
+
+The separate [replacement experiment](FIGURE3_REFINEMENT_REPLACEMENT.md) chooses a continuous residual correction *only to set the representable range* and uses the finite-bit exact oracle for every actual column update. It reaches a very different accuracy regime, illustrating that a plausible `auto_bound` interpretation cannot be assumed to reproduce Table 3. Its additional classical range solve changes the cost model and is explicitly **not** the historical experiment.

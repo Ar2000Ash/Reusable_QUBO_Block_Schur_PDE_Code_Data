@@ -42,3 +42,7 @@ The explicit `auto_bound` and correction-scale audit is in
 [`docs/FIGURE3_SCALE_AUDIT.md`](docs/FIGURE3_SCALE_AUDIT.md). It rejects the
 predeclared simple hypotheses without modifying source results; the historical
 Table 3 protocol is still **not independently reproduced**.
+
+## New first-block energy constraint and independent replacement
+
+[`docs/FIGURE3_REFINEMENT_REPLACEMENT.md`](docs/FIGURE3_REFINEMENT_REPLACEMENT.md) specifies an auditable but **non-historical** fully rerunnable replacement, with its separate output table. [`src/figure3_initial_scale_constraints.py`](src/figure3_initial_scale_constraints.py) proves that nominal fixed gamma is inconsistent with the archived first-block/maximum-energy constraints for Poisson and Helmholtz. Neither result reconstructs the missing historical `auto_bound` program; published Table 3 and Figure 3 remain unchanged.

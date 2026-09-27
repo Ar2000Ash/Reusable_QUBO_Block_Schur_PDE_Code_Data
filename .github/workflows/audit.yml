@@ -54,6 +54,11 @@ jobs:
         run: python experimental_reconstruction/tests/check_figure2.py
       - name: Audit explicit Figure 3 auto-bound and correction-scale hypotheses
         run: python experimental_reconstruction/src/figure3_scale_audit.py
+      - name: Check Figure 3 first-block energy constraints and nonhistorical replacement
+        run: |
+          python experimental_reconstruction/src/figure3_initial_scale_constraints.py
+          python experimental_reconstruction/tests/check_figure3_refinement_replacement.py
+          python experimental_reconstruction/src/figure3_refinement_replacement.py
       - name: Independently verify reconstructed oracle and five-PDE boundary fingerprints
         run: |
           python experimental_reconstruction/tests/check_oracle.py
