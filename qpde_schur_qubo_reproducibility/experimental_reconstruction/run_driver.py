@@ -8,6 +8,7 @@ ROOT=Path(__file__).resolve().parent
 sys.path.insert(0,str(ROOT/'src'))
 from exact_oracle import reduced_exact,cuda_full_exact
 from experiments import benchmark,k_sweep_one
+from figure2_exact_reconstruction import all_rows
 
 ARCHIVE=ROOT.parent/'qpde_qci_end_to_end_recovery'/'source'/'preprocessed'/'qci_60qubo_exact_minima_preprocessed_summary.csv'
 FIXTURE=ROOT/'fixtures'/'qci_60qubo_exact_minima_preprocessed_summary.csv'
@@ -56,13 +57,21 @@ def main():
     qo=sub.add_parser('oracle',help='certify archived QCI minimum and second minimum');qo.add_argument('--raw',type=Path)
     qo.add_argument('--id',default='QCI-001');qo.add_argument('--all',action='store_true');qo.add_argument('--backend',choices=['cpu_reduced','cuda'],default='cpu_reduced');qo.add_argument('--chunk-power',type=int,default=16);qo.add_argument('--out',type=Path)
     bx=sub.add_parser('five-preview',help='candidate Table 3 output (DOES NOT match archive yet)');bx.add_argument('--schedule',choices=['fixed','powers2','powers4','powers10','adaptive'],default='fixed')
-    ks=sub.add_parser('sweep-preview',help='candidate Figure 2 output (DOES NOT match archive yet)')
+    ks=sub.add_parser('sweep-preview',help='accepted Figure 2 sweep output from PDE and exact oracle')
+    fig=sub.add_parser('figure2',help='write independently reproduced 14-row Figure 2 table')
+    fig.add_argument('--out',type=Path,default=ROOT/'outputs'/'figure2_independent.csv')
     args=parser.parse_args()
     if args.command=='oracle':qci(args)
     elif args.command=='five-preview':
         for n in ['heat_1d','burgers_1d','poisson_2d','helmholtz_2d','klein_gordon_1d']:
             r=benchmark(n,passes=3,schedule=args.schedule)
             print(n,'calls',r['calls'],'rel_dense',r['rel_dense'],'max_inverse_residual',r['max_inverse_residual'])
+    elif args.command=='figure2':
+        rows=all_rows();columns=list(dict.fromkeys(k for row in rows for k in row))
+        args.out.parent.mkdir(parents=True,exist_ok=True)
+        with args.out.open('w',newline='') as f:
+            w=csv.DictWriter(f,fieldnames=columns);w.writeheader();w.writerows(rows)
+        print('Wrote',len(rows),'independently reconstructed Figure 2 rows:',args.out)
     elif args.command=='sweep-preview':
         for n in ['poisson_2d','klein_gordon_1d']:
             for K in range(4,11):

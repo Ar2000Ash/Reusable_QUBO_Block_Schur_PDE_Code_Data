@@ -10,7 +10,7 @@ REF=json.loads((ROOT/'tests/reference_metrics.json').read_text())
 OUT=ROOT/'outputs';OUT.mkdir(exist_ok=True)
 
 def compare():
-    report={'method':'independently reconstructed exact CPU oracle, candidate refinement schedule fixed gamma',
+    report={'method':'independent CPU exact oracle; verified Figure 2 quantized Schur recursion; Figure 3 refinement remains candidate',
         'definition':'values reported as match only when independently reproduced to numerical tolerance',
         'fixed':[],'sweep':[]}
     fixedrows=[];sweeprows=[]
@@ -34,13 +34,14 @@ def compare():
     report['fixed']=fixedrows;report['sweep']=sweeprows
     report['fixed_exact_match_count']=sum(x['full_results_pass'] for x in fixedrows)
     report['sweep_row_exact_match_count']=sum(all(x[k+'_match'] for k in ('rel_error','mean_inverse_error','mean_energy')) for x in sweeprows)
-    report['overall_status']='INCOMPLETE: experimental details remain to be identified; do not replace archived results or merge drivers as an exact reproduction'
+    report['overall_status']=('FIGURE 2 VERIFIED; FIGURE 3 INCOMPLETE: historical auto_bound/refinement details not yet recovered; do not replace archived Table 3 outputs')
     (OUT/'consistency_report.json').write_text(json.dumps(report,indent=2)+'\n')
     for name,rows in [('fixed_candidate.csv',fixedrows),('k_sweep_candidate.csv',sweeprows)]:
         with (OUT/name).open('w',newline='') as f:
             w=csv.DictWriter(f,rows[0].keys());w.writeheader();w.writerows(rows)
     print('Exact fixed-PDE output matches:',report['fixed_exact_match_count'],'/ 5')
     print('Exact K-sweep complete-row matches:',report['sweep_row_exact_match_count'],'/ 14')
+    assert report['sweep_row_exact_match_count']==14, 'Figure 2 independent reproduction regressed'
     print('Wrote outputs/consistency_report.json: unresolved values are NOT asserted as reproduced')
     return report
 if __name__=='__main__':compare()

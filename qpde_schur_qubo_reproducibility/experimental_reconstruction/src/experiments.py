@@ -80,23 +80,22 @@ def benchmark(name:str,K:int=10,passes:int=3,schedule:str='fixed',gamma:float|No
         'final_solution':x,'dense_solution':reference,'exact_field':exact,'stats':stats}
 
 
-def k_sweep_one(name:str,K:int,omega:float=1.7,tilt:float=.2):
-    if name=='poisson_2d':
-        d,l,u,A,exact,b,bc=elliptic_blocks('poisson_2d',6,2);gamma=.01
-        blocks,low,up=extract_blocks(A);ss,dense_inv=schur_chain(blocks,low,up);approx,stats=solve_columns(ss,gamma,K,passes=0)
-        solution=cached_solve(low,up,approx,b);ref=np.linalg.solve(A,b)
-        return {'pde':name,'K':K,'rel_error':float(np.linalg.norm(solution-ref)/np.linalg.norm(ref)),
-                'mean_inverse_error':float(np.mean([np.linalg.norm(a-b,'fro') for a,b in zip(approx,dense_inv)])),
-                'mean_energy':float(np.mean([v['min_energy'] for v in stats])),'max_energy':max(v['min_energy'] for v in stats),
-                'solves':len(stats),'condition_A':float(np.linalg.cond(A))}
-    if name=='klein_gordon_1d':
-        # The archived K-sweep uses a different n, dt, c, mu than Table 3.
-        A,*_=kg_matrix(n=6,dt=.015,c=1.,mu=1.25);gamma=1.
-        d,l,u=extract_blocks(A);blocks,low,up=extract_blocks(A);ss,dense_inv=schur_chain(blocks,low,up);approx,stats=solve_columns(ss,gamma,K,passes=0)
-        final=integrate('klein_gordon_1d',approx,A,dt=.015,T=.3,nspace=6,c=1.,mu=1.25)
-        dense=integrate('klein_gordon_1d',dense_inv,A,dt=.015,T=.3,nspace=6,c=1.,mu=1.25)
-        return {'pde':name,'K':K,'rel_error':float(np.linalg.norm(final-dense)/np.linalg.norm(dense)),
-                'mean_inverse_error':float(np.mean([np.linalg.norm(a-b,'fro') for a,b in zip(approx,dense_inv)])),
-                'mean_energy':float(np.mean([v['min_energy'] for v in stats])),'max_energy':max(v['min_energy'] for v in stats),
-                'solves':len(stats),'condition_A':float(np.linalg.cond(A))}
-    raise KeyError(name)
+
+def k_sweep_one(name:str,K:int):
+    """Verified Figure 2 sweep using the quantized recursive Schur chain.
+
+    The original candidate used the *dense* Schur chain to build all local
+    QUBOs and imported the fixed-validation boundary data into the sweep.
+    Both are contradicted by the archived numerical fingerprints. See
+    figure2_exact_reconstruction and tests/check_figure2.py.
+    """
+    from figure2_exact_reconstruction import run_one
+    row=run_one(name,K)
+    row['rel_error']=(row['rel_l2_vs_discrete_exact'] if name=='poisson_2d'
+                      else row['rel_l2_vs_dense_final'])
+    row['mean_inverse_error']=row['mean_inv_fro_error']
+    row['mean_energy']=row['mean_qubo_energy']
+    row['max_energy']=row['max_qubo_energy']
+    row['solves']=row['num_qubo_column_solves']
+    row['condition_A']=float(np.linalg.cond(fixed_operator(name)[0])) if name not in ('klein_gordon_1d','poisson_2d') else None
+    return row

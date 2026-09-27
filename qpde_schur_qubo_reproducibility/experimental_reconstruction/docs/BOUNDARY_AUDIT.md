@@ -14,6 +14,17 @@ For fixed validation, the common settings are `B=2, M=1, K=10`, 3 residual-corre
 
 The 2D discrete manufactured convention can be written `f_discrete=A@u_exact-boundary_load`, and the assembled right-hand side is `f_discrete+boundary_load=A@u_exact`. This is **not** equivalent to claiming the sampled continuous differential forcing alone generated the archived fixed-validation RHS. A separate diagnostic confirms the corresponding continuous-vs-discrete truncation residual. Boundary loads are positive multiples of `g` associated with off-diagonal `-h^-2` stencil entries.
 
-**Figure 2 is different from Table 3.** The raw K-sweep config uses Poisson `nx=6,ny=2`, and Klein–Gordon `nx=6`, `dt=0.015,T=0.3,c=1.0,mu=1.25`; the output says there are 20 time steps. These are **not** the fixed-validation Klein–Gordon coefficients `c=1.1,mu=2`. The K-sweep config does not retain its full original reference field, initial values, forcing and boundary evolution; importing the fixed-validation functions into that experiment does not reproduce all fourteen plotted rows. The code labels that experiment as a candidate preview until it matches the archive without fitting unknown conditions to the plotted data.
+**Figure 2 has now been independently reconstructed and numerically accepted.**
+The prior note below is superseded by `docs/FIGURE2_RECONSTRUCTION.md`.
+The Poisson sweep (6×2 grid) uses **zero Dirichlet traces** and the discrete
+manufactured field `(sin(pi*x)+0.2*sin(2*pi*x))*sin(pi*y)`. The six-point,
+20-step Klein–Gordon sweep uses zero Dirichlet traces and **no forcing**,
+with initial `u=sin(pi*x), v=0` and analytic angular frequency
+`sqrt(pi*pi+1.25*1.25)`. The exact sweep QUBO objectives use the *previous
+quantized inverse* to form the next Schur block; classical Schur inverses
+remain separate reference data for diagnostic errors. The recovered code
+reproduces all fourteen archived numerical rows, including the six fitted
+slopes, using independent exact finite-bit minimization. This sweep protocol
+must not be substituted for the five fixed-validation experiments.
 
 **Figure 3 residual refinement remains unresolved.** The historical config has `GAMMA_MODE=auto_bound`, a `FIXED_GAMMA` parameter and 3 residual-refinement stages. Neither its exact scale-selection rule nor its per-stage correction scale is in the archived source. Holding gamma constant or choosing ad-hoc reduction schedules fails Table 3 acceptance. In particular, matching a convergence slope or a single final error would be insufficient; every benchmark's relative field error, cached inverse residual, and solve count must match.
