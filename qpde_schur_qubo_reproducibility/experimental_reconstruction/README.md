@@ -59,3 +59,7 @@ python experimental_reconstruction/src/render_figure3_fixed_scales.py
 python experimental_reconstruction/tests/check_figure3_fixed_paper_scales.py
 python experimental_reconstruction/tests/check_figure3_committed_outputs.py
 ```
+
+## Pointwise solution-versus-ground-truth curves
+
+[`src/render_ground_truth_comparisons.py`](src/render_ground_truth_comparisons.py) regenerates six [solution overlay SVG plots](figures/ground_truth) (Heat, Burgers, Poisson, Helmholtz, Klein–Gordon u and v separately), pointwise error plots, and [comparison metrics](figures/ground_truth/comparison_metrics.json) from the **new fixed-scale field CSV**, plus independently reconstructed manufactured fields. It verifies all five relative errors against the new table. The 2D manufactured and dense references coincide by the discrete-manufactured RHS convention; transient dense and analytical references are shown separately. The v-component of Klein–Gordon has considerably greater relative error than the u-component; the combined-state error can mask it. These plots are new fixed-scale results, not historical `auto_bound` data.
