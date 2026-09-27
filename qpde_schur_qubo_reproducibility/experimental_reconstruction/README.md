@@ -35,3 +35,10 @@ python tests/compare_results.py  # Figure 2 passes; Figure 3 remains explicitly 
 To run inside the current GitHub package, put these files in `experimental_reconstruction/`; `tests/check_archived_qci.py` will locate `../data/raw/dirac3/reconstructed_60_instances.csv`. Run the CUDA command on your RTX 5070 Ti Laptop or A40 node after installing a compatible GPU build of PyTorch. For 24-bit instances, each job covers exactly 16,777,216 binary states, not an estimated/sample-based search.
 
 Read `docs/BOUNDARY_AUDIT.md` for exact boundary functions, time-level treatment, and known reproduction gaps.
+
+## Figure 3 protocol hypotheses
+
+The explicit `auto_bound` and correction-scale audit is in
+[`docs/FIGURE3_SCALE_AUDIT.md`](docs/FIGURE3_SCALE_AUDIT.md). It rejects the
+predeclared simple hypotheses without modifying source results; the historical
+Table 3 protocol is still **not independently reproduced**.
