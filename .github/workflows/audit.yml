@@ -59,6 +59,10 @@ jobs:
           python experimental_reconstruction/src/figure3_initial_scale_constraints.py
           python experimental_reconstruction/tests/check_figure3_refinement_replacement.py
           python experimental_reconstruction/src/figure3_refinement_replacement.py
+      - name: Verify new fixed-paper-scale Figure 3 source, boundaries and manuscript outputs
+        run: |
+          python experimental_reconstruction/tests/check_figure3_fixed_paper_scales.py
+          python experimental_reconstruction/tests/check_figure3_committed_outputs.py
       - name: Independently verify reconstructed oracle and five-PDE boundary fingerprints
         run: |
           python experimental_reconstruction/tests/check_oracle.py

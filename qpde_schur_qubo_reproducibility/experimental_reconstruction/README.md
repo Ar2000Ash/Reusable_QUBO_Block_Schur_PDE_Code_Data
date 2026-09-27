@@ -46,3 +46,16 @@ Table 3 protocol is still **not independently reproduced**.
 ## New first-block energy constraint and independent replacement
 
 [`docs/FIGURE3_REFINEMENT_REPLACEMENT.md`](docs/FIGURE3_REFINEMENT_REPLACEMENT.md) specifies an auditable but **non-historical** fully rerunnable replacement, with its separate output table. [`src/figure3_initial_scale_constraints.py`](src/figure3_initial_scale_constraints.py) proves that nominal fixed gamma is inconsistent with the archived first-block/maximum-energy constraints for Poisson and Helmholtz. Neither result reconstructs the missing historical `auto_bound` program; published Table 3 and Figure 3 remain unchanged.
+
+## Independently rerun fixed-scale Figure 3 (new manuscript replacement)
+
+The separately specified [fixed-paper-scale protocol](docs/FIGURE3_FIXED_SCALE_PROTOCOL.md) uses the paper's nominal gamma values **without** historical `auto_bound`: Heat/Burgers 0.60, Poisson/Helmholtz 0.01, Klein–Gordon 1.00, with `B=2,M=1,K=10`, one initial plus three exact residual solves per inverse column. All 360 correction bitstrings are zero, so this experiment is a controlled finite-grid baseline, **not evidence that fixed-grid residual corrections improve accuracy**. The full source and stage logs, [new table](outputs/figure3_fixed_paper_scales.csv), [manuscript replacement](manuscript/FIGURE3_FIXED_SCALE_REVISION.tex), [Figure 3 SVG](figures/figure3_fixed_paper_scales.svg), and [stage diagnostic](figures/figure3_fixed_scale_stages.svg) are generated without reading historical numerical targets. Historical Table 3 and Figure 3 inputs are retained unchanged as archival evidence; this new experiment must be cited separately. No new CUDA timings have been measured.
+
+Run from the parent package with the parent `requirements.txt` installed:
+
+```bash
+python experimental_reconstruction/src/figure3_fixed_paper_scales.py
+python experimental_reconstruction/src/render_figure3_fixed_scales.py
+python experimental_reconstruction/tests/check_figure3_fixed_paper_scales.py
+python experimental_reconstruction/tests/check_figure3_committed_outputs.py
+```
