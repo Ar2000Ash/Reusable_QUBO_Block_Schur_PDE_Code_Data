@@ -153,7 +153,7 @@ def main():
             '|:--|--:|--:|']
     for v in components:kgcomp.append('| '+' | '.join((v['component'],sci(v['baseline_rel_dense']),sci(v['rel_dense'])))+' |')
     (MAN/'TABLE3_KG_COMPONENTS.md').write_text('\n'.join(kgcomp)+'\n',encoding='utf8')
-    (FIG/'figure3_multiscale_ground_truth_metrics.json').write_text(json.dumps({'method':'new multiscale fixed-schedule; separately reconstructed Dirichlet data','fields':details},indent=2)+'\n')
+    (FIG/'figure3_multiscale_ground_truth_metrics.json').write_text(json.dumps({'method':'predetermined multiscale correction schedule','fields':details},indent=2)+'\n')
     print('Rendered: main Figure 3, stage diagnostics, 6-panel field overlay, Table 3 and manuscript plot data.')
     return new
 
