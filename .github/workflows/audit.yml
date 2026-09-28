@@ -71,6 +71,8 @@ jobs:
         run: |
           python experimental_reconstruction/tests/check_figure3_multiscale.py
           python experimental_reconstruction/tests/check_figure3_multiscale_outputs.py
+      - name: Verify sequential QUBO-array solver against independent CPU brute force
+        run: python experimental_reconstruction/tests/check_batch_qubo_cuda.py
       - name: Independently verify reconstructed oracle and five-PDE boundary fingerprints
         run: |
           python experimental_reconstruction/tests/check_oracle.py
