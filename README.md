@@ -1,33 +1,93 @@
-# Reusable QUBO-derived Block-Schur PDE Code and Data
+# Reusable QUBO-Derived Block-Schur Inverse Factors for Fixed-Operator PDE Solvers
 
-This repository is the computational companion to *Reusable QUBO-Derived Block-Schur Inverse Factors for Fixed-Operator Finite-Difference PDE Solvers*. All scripts, archived paper figures and numerical data are inside [`qpde_schur_qubo_reproducibility/`](qpde_schur_qubo_reproducibility/).
+[![Reproducibility](https://github.com/Ar2000Ash/Reusable_QUBO_Block_Schur_PDE_Code_Data/actions/workflows/reproduce.yml/badge.svg)](https://github.com/Ar2000Ash/Reusable_QUBO_Block_Schur_PDE_Code_Data/actions)
+
+Source code, numerical records, and plotting data accompanying the paper *Reusable QUBO-Derived Block-Schur Inverse Factors for Fixed-Operator Finite-Difference PDE Solvers*.
+
+The offline calculation solves compact least-squares QUBOs for columns of local Schur inverses. These columns are decoded and cached. Each subsequent right-hand side is treated by ordinary classical block forward/backward substitution. The five-PDE validation uses four finite-grid optimizations per inverse column with the predetermined scale `gamma_p = gamma0 / 8**p` for `p = 0, 1, 2, 3`.
+
+## Quick start
+
+Python 3.11 or later:
 
 ```bash
-cd qpde_schur_qubo_reproducibility
+python -m venv .venv
+source .venv/bin/activate
 python -m pip install -r requirements.txt
-sha256sum -c SHA256SUMS.txt
-python analysis/build_processed_data.py
-python analysis/verify_results.py
-python analysis/check_dirac3_decode.py
-python analysis/check_qci_input_qubos.py
-python analysis/reconstruct_dirac3_pde.py --write
-python analysis/verify_qci_recovery.py
+make reproduce
 ```
 
-The [2026-09-26 original QCI source recovery](qpde_schur_qubo_reproducibility/data/provenance/qci_reconstruction_2026_09_26/README.md) preserves the original 34-job device response JSONL and six preprocessing source tables alongside independently reconstructed mathematical QUBO inputs and corrected signed-decoding outputs. The 34 original uploaded polynomial files have **not** been recovered byte-for-byte. Their archived original hashes remain separate from new reconstructed-file hashes. No new hardware experiment was performed.
+`make reproduce` recomputes the finite-bit sweep and five-PDE experiment, regenerates processed data and figures, verifies the recorded QCI bitstrings and terminal fields, and runs the large-block and 96-bit studies. Results are written to `finite_bit/outputs/`, `outputs/`, `data/processed/`, and `figures/`. The original scientific records under `data/raw/` are not modified. Source-level checks also run in [GitHub Actions](.github/workflows/reproduce.yml).
 
-The independent [GitHub Actions audit](.github/workflows/audit.yml) runs the preprocessing, decoding, numerical checks, result figures, large-block experiment and raw-QCI reconstruction verification. The historical exact 24-bit enumeration driver and complete original PDE driver remain unarchived; consult project documentation for the precise reproducibility boundary.
+The plotting script uses the paper's serif typography, with native LaTeX text when a LaTeX installation is present. The supplied manuscript Figure 3 data can be used directly with PGFPlots.
 
-The repository has no explicit software license yet. Copyrighted code is provided for review and reproducibility, but no open-source license is implied.
+## Results and regeneration
 
-## Independently rerun fixed-scale Figure 3
+| Paper item | Main source | Reproduction |
+|:--|:--|:--|
+| Figure 1, Table 1 | Mathematical description in paper | Architecture and definitions |
+| Table 2 | `finite_bit/src/pde_models.py`, `finite_bit/src/operators.py` | Benchmark operators, forcing and conditions |
+| Figure 2 | `finite_bit/src/figure2_exact_reconstruction.py` | Compute and check the fourteen precision-sweep rows |
+| Table 3, Figure 3 | `finite_bit/src/figure3_multiscale.py` | Compute all five PDEs, field values and four-stage logs |
+| Table 4, Figure 4 | `experiments/run_large_block.py` | Fixed-`N=960` Poisson block-size sweep |
+| Table 5, Figure 5 | `experiments/run_b8_optimizer.py` | 96-bit heuristic optimization and complete cached solve |
+| Table 6, Figures 6–7 | `analysis/reconstruct_dirac3_pde.py` | Re-decode recorded QCI bitstrings and rebuild terminal fields |
 
-A new fixed-paper-scale five-PDE benchmark and manuscript replacement, with all three correction passes explicitly logged, is available under [experimental_reconstruction](qpde_schur_qubo_reproducibility/experimental_reconstruction/docs/FIGURE3_FIXED_SCALE_PROTOCOL.md). Its [Figure 3](qpde_schur_qubo_reproducibility/experimental_reconstruction/figures/figure3_fixed_paper_scales.svg) and [new Table 3](qpde_schur_qubo_reproducibility/experimental_reconstruction/outputs/figure3_fixed_paper_scales.csv) are fresh **CPU-exact reduced-grid** measurements. The original archived `auto_bound` results remain untouched. With unchanged nominal scales all 360 residual-correction solves return zero; no refinement gain or new GPU timings are claimed.
+The central numerical checks are:
 
-## New multiscale five-PDE Figure 3
+```bash
+python finite_bit/tests/check_figure2.py
+python finite_bit/tests/check_figure3_multiscale.py
+python finite_bit/tests/check_figure3_multiscale_outputs.py
+python analysis/check_qci_input_qubos.py
+python analysis/reconstruct_dirac3_pde.py --write
+python analysis/verify_results.py
+```
 
-The independently rerun [predetermined multiscale Figure 3](qpde_schur_qubo_reproducibility/experimental_reconstruction/docs/FIGURE3_MULTISCALE_PROTOCOL.md) is the recommended **new** five-PDE numerical result for the revised manuscript. It retains the paper's initial scales, 24-bit QUBO, PDE data and the same four solves per column, but explicitly reduces the correction scale by a factor eight at each stage. [New Table 3](qpde_schur_qubo_reproducibility/experimental_reconstruction/outputs/figure3_multiscale.csv), [Figure 3 SVG](qpde_schur_qubo_reproducibility/experimental_reconstruction/figures/figure3_multiscale.svg), [stage diagnostics](qpde_schur_qubo_reproducibility/experimental_reconstruction/figures/figure3_multiscale_stages.svg), and [manuscript LaTeX](qpde_schur_qubo_reproducibility/experimental_reconstruction/manuscript/FIGURE3_MULTISCALE_REVISION.tex) are generated independently of the preserved historical data. The original fixed-grid rerun remains a control. The new results do not claim GPU or QCI hardware timings.
+The five-PDE experiment uses `B=2, M=1, K=10`, with initial scales 0.60 (Heat, Burgers), 0.01 (Poisson, Helmholtz), and 1.00 (Klein–Gordon). For the transient problems `dt=0.001` and `T=0.05`. Its 480 local minimizations are performed by the exact two-scalar reduced-grid CPU oracle. The reported `2**24` possible states per problem describe the logical problem size, not measured CPU/GPU work. A separate single-grid control is provided under `figure3_control.py`; the manuscript's main Figure 3 uses only the multiscale results.
 
-## Sequential CUDA QUBO array solver
+## QCI-derived PDE fields
 
-The new [general-purpose sequential CUDA utility](qpde_schur_qubo_reproducibility/experimental_reconstruction/docs/CUDA_BATCH_QUBO.md) accepts arrays or iterables of QUBO matrices and returns minimum bitstrings and objective values in input order. It exhaustively searches one QUBO at a time in bounded GPU-memory batches using float64 PyTorch; the batch is not resident on the GPU. This is a separate convenience API, not a change to the five-PDE Figure 3 method or the original hardware archive. CUDA device testing and timing require a compatible GPU. Run the independent small-QUBO validation with `python qpde_schur_qubo_reproducibility/experimental_reconstruction/tests/check_batch_qubo_cuda.py`.
+The stored QCI campaign comprises 34 distinct submitted QUBOs mapped to 60 inverse-column uses across Heat, Poisson and Klein–Gordon. The 24-bit solutions are decoded with fixed scales `gamma = 0.60, 0.01, 1.00`, respectively; two decoded columns form each 2×2 inverse block. The implementation verifies the saved Schur blocks, reconstructs the block-tridiagonal operator and applies its QCI-derived inverse factors by classical forward/backward substitution.
+
+```bash
+python analysis/verify_qci_recovery.py
+python analysis/check_qci_input_qubos.py
+python analysis/reconstruct_dirac3_pde.py --write
+python analysis/build_processed_data.py
+python analysis/generate_figures.py
+```
+
+The recorded dense terminal reference defines the reproducible right-hand side `b = A @ u_ref`. This verifies the complete terminal cached linear solve and its field values, not an unavailable full transient forcing history. The original QCI device response data are retained; the directly accessible QUBO coefficient tables reconstruct the same mathematical objectives but are not byte-identical copies of the original vendor upload files. Physical device execution requires external QCI access.
+
+## CUDA QUBO utility
+
+`finite_bit/src/batch_qubo_cuda.py` implements `solve_qubos_cuda(qubos)` for a sequence of QUBO matrices. It processes matrices one by one using bounded float64 CUDA buffers and exhaustive binary search; there is no silent CPU fallback. The optional dependency is a CUDA-enabled PyTorch installation appropriate for your driver. Small-instance CPU and optional GPU tests:
+
+```bash
+python finite_bit/tests/check_batch_qubo_cuda.py
+```
+
+This general-purpose GPU utility is not the measured backend for the five-PDE CPU results.
+
+## Layout
+
+```text
+src/qpde_schur/       Core block-Schur and fixed-point operations
+finite_bit/src/       Exact local QUBO oracle, five-PDE benchmarks and CUDA utility
+finite_bit/tests/     Independent numerical and algorithm tests
+finite_bit/outputs/   Five-PDE tables, fields and inverse-column logs
+experiments/          Large-block and 96-bit experiments
+analysis/             Hardware reconstruction, processing and plotting
+data/raw/             Primary numerical and QCI records
+data/reconstructed_qubos/  Directly accessible QCI mathematical inputs
+data/provenance/      Recorded QCI device-response package and checksums
+data/processed/       Publication figure inputs
+figures/              Generated result figures
+```
+
+The requirements and scripts are independent of account credentials. Numerical reference arrays and recorded bitstrings are scientific fixtures; optimizer-quality and hardware measurements are reported separately from exact CPU and classical results.
+
+## Citation
+
+Please cite the associated paper and the software package; author details are provided in [`CITATION.cff`](CITATION.cff).
