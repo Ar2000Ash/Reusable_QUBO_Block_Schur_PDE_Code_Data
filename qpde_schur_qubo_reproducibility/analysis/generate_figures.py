@@ -10,7 +10,7 @@ LaTeX is unavailable.
 Outputs
 -------
 figures/figure_02_quantization_convergence.png
-figures/figure_03_five_pde_validation.png
+figures/figure_03_five_pde_validation.png  # NEW multiscale vs independently rerun fixed-grid control
 figures/figure_04_large_block_scaling.png
 figures/figure_05_b8_optimizer.png
 figures/figure_06_dirac3_audit.png
@@ -107,26 +107,33 @@ def figure_02() -> None:
 
 
 def figure_03() -> None:
-    """Five-PDE end-to-end accuracy and cached-inverse residuals."""
-    d = pd.read_csv(DATA / "fixed_plot.csv")
+    """New Figure 3: independent multiscale experiment versus fixed-grid control.
+
+    This intentionally does not plot the preserved historical auto_bound data.
+    """
+    d = pd.read_csv(DATA / "figure3_multiscale_plot.csv")
+    assert len(d) == 5
     x = np.arange(len(d))
     labels = d["short"].tolist()
     fig, axes = plt.subplots(1, 2, figsize=(9.0, 3.45))
 
-    axes[0].semilogy(x, d["rel_dense"], "o", color=BLUE, ms=6)
-    axes[0].set_title("(a) End-to-end relative error")
-    axes[0].set_ylabel(r"$e_{\rm dense}$")
-    axes[0].set_ylim(1e-7, 8e-2)
-
-    axes[1].semilogy(x, d["max_inv_res"], "s", color=TEAL, ms=6)
-    axes[1].set_title("(b) Maximum cached inverse residual")
-    axes[1].set_ylabel(r"$\rho_S$")
-    axes[1].set_ylim(1e-7, 2e-3)
-
-    for ax in axes:
+    panels = (
+        (axes[0], "rel_dense", "baseline_rel_dense", "(a) End-to-end relative error",
+         r"$e_{\rm dense}$", (1e-6, 7e-2)),
+        (axes[1], "max_inv_res", "baseline_max_inv_res", "(b) Maximum cached inverse residual",
+         r"$\rho_S$", (1e-7, 6e-3)),
+    )
+    for ax, key, baseline, title, ylabel, limits in panels:
+        ax.semilogy(x, d[baseline], "o", color=BLUE, ms=7, markerfacecolor="none",
+                    markeredgewidth=1.4, label="fixed-grid control")
+        ax.semilogy(x, d[key], "D", color=ORANGE, ms=5.5, label="multiscale")
+        ax.set_title(title)
+        ax.set_ylabel(ylabel)
+        ax.set_ylim(*limits)
         ax.set_xlim(-0.45, len(x) - 0.55)
         ax.set_xticks(x, labels, rotation=24, ha="right")
         ax.grid(True, which="both", alpha=0.18)
+    axes[0].legend(frameon=False, loc="upper center", fontsize=7)
     finish(fig, "figure_03_five_pde_validation.png")
 
 
