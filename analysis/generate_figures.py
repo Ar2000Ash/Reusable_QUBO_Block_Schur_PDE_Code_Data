@@ -10,7 +10,7 @@ LaTeX is unavailable.
 Outputs
 -------
 figures/figure_02_quantization_convergence.png
-figures/figure_03_five_pde_validation.png  # new multiscale; original two-panel plot structure
+figures/figure_03_five_pde_validation.png
 figures/figure_04_large_block_scaling.png
 figures/figure_05_b8_optimizer.png
 figures/figure_06_dirac3_audit.png
@@ -107,11 +107,7 @@ def figure_02() -> None:
 
 
 def figure_03() -> None:
-    """Exact multiscale five-PDE validation in the original two-panel layout.
-
-    New numerical inputs come only from source-reproducible multiscale outputs.
-    Historical fixed-validation values remain separately archived.
-    """
+    """Five-PDE validation: final-state error and cached inverse residual."""
     d = pd.read_csv(DATA / "figure3_multiscale_plot.csv")
     assert d["short"].tolist() == ["Heat", "Burgers", "Poisson", "Helmholtz", "Klein--Gordon"]
     x = np.arange(len(d))

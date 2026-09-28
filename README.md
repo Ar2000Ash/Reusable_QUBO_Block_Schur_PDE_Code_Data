@@ -17,7 +17,7 @@ make reproduce
 
 `make reproduce` recomputes the finite-bit sweep and five-PDE experiment, regenerates processed data and figures, verifies the recorded QCI bitstrings and terminal fields, and runs the large-block and 96-bit studies. Results are written to `finite_bit/outputs/`, `outputs/`, `data/processed/`, and `figures/`. The original scientific records under `data/raw/` are not modified. Source-level checks also run in [GitHub Actions](.github/workflows/reproduce.yml).
 
-The plotting script uses the paper's serif typography, with native LaTeX text when a LaTeX installation is present. The supplied manuscript Figure 3 data can be used directly with PGFPlots.
+The plotting script uses the paper's serif typography, with native LaTeX text when a LaTeX installation is present. Figure files, including the native PGFPlots source for Figure 3, are kept together under [`figures/`](figures/). The Figure 3 source reads `data/processed/figure3_multiscale_plot.csv`.
 
 ## Results and regeneration
 
@@ -81,10 +81,14 @@ data/raw/             Primary numerical and QCI records
 data/reconstructed_qubos/  Directly accessible QCI mathematical inputs
 data/provenance/      Recorded QCI device-response package and checksums
 data/processed/       Publication figure inputs
-figures/              Generated result figures
+figures/              Figures 2–7, Figure 3 PGFPlots source, and shared style
 ```
 
 The requirements and scripts are independent of account credentials. Numerical reference arrays and recorded bitstrings are scientific fixtures; optimizer-quality and hardware measurements are reported separately from exact CPU and classical results.
+
+## Figures
+
+The six numerical figure previews are provided in [`figures/`](figures/). Regenerate the PNGs with `python analysis/build_processed_data.py` followed by `python analysis/generate_figures.py`. The native manuscript Figure 3 is [`figures/figure_03_five_pde_validation.tex`](figures/figure_03_five_pde_validation.tex); include [`figures/qpde_figure_style.tex`](figures/qpde_figure_style.tex) in the LaTeX preamble when using this source. Both the PNG generator and the PGFPlots file read the same `data/processed/figure3_multiscale_plot.csv`.
 
 ## Citation
 
