@@ -236,7 +236,7 @@ def build_multiscale_figure3() -> None:
     reconstruction = ROOT / "finite_bit"
     source = reconstruction / "outputs"
     new = pd.read_csv(source / "figure3_multiscale.csv")
-    fixed = pd.read_csv(source / "figure3_fixed_paper_scales.csv")
+    fixed = pd.read_csv(source / "figure3_control.csv")
     order = ["heat_1d", "burgers_1d", "poisson_2d", "helmholtz_2d", "klein_gordon_1d"]
     labels = ["Heat", "Burgers", "Poisson", "Helmholtz", "Klein--Gordon"]
     assert new["pde"].tolist() == fixed["pde"].tolist() == order
