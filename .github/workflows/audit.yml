@@ -8,6 +8,7 @@ on:
       - audit/direct-qubos-pde-rebuild
       - reconstruction/exact-oracle-five-pde-stage1
       - reconstruction/fixed-paper-scales-figure3
+      - experiment/figure3-predetermined-multiscale
   pull_request:
   workflow_dispatch:
 
@@ -66,6 +67,10 @@ jobs:
           python experimental_reconstruction/tests/check_figure3_committed_outputs.py
       - name: Recompute five-PDE ground-truth comparison curves and cross-check Table 3
         run: python experimental_reconstruction/src/render_ground_truth_comparisons.py
+      - name: Verify predetermined multiscale five-PDE QUBO refinement, data and Figure 3
+        run: |
+          python experimental_reconstruction/tests/check_figure3_multiscale.py
+          python experimental_reconstruction/tests/check_figure3_multiscale_outputs.py
       - name: Independently verify reconstructed oracle and five-PDE boundary fingerprints
         run: |
           python experimental_reconstruction/tests/check_oracle.py
