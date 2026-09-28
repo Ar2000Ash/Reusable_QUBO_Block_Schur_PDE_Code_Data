@@ -228,11 +228,7 @@ def build_dirac3() -> None:
 
 
 def build_multiscale_figure3() -> None:
-    """Derive the new Figure 3 and Table 3 from fresh, independently rerunnable data.
-
-    Historical data/raw/fixed_validation remains immutable. The control comes
-    from the separately rerun single-grid experiment, NOT the historical run.
-    """
+    """Derive Table 3 and Figure 3 data from the five-PDE experiments."""
     reconstruction = ROOT / "finite_bit"
     source = reconstruction / "outputs"
     new = pd.read_csv(source / "figure3_multiscale.csv")
