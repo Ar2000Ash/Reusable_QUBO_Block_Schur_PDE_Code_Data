@@ -33,6 +33,7 @@ qci: tables
 experiments:
 	$(PYTHON) experiments/run_large_block.py
 	$(PYTHON) experiments/run_b8_optimizer.py
+	$(PYTHON) analysis/check_experiment_outputs.py
 
 cuda-test:
 	$(PYTHON) finite_bit/tests/check_batch_qubo_cuda.py
