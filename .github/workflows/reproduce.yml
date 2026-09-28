@@ -46,5 +46,8 @@ jobs:
           python analysis/verify_qci_recovery.py
       - name: Check CUDA QUBO interface on CPU
         run: python finite_bit/tests/check_batch_qubo_cuda.py
-      - name: Regenerate large-block numerical study
-        run: python experiments/run_large_block.py --output /tmp/large_block.csv
+      - name: Recompute and check larger-block numerical studies
+        run: |
+          python experiments/run_large_block.py --output /tmp/large_block.csv
+          python experiments/run_b8_optimizer.py --output-dir /tmp/b8_optimizer
+          python analysis/check_experiment_outputs.py --large /tmp/large_block.csv --b8 /tmp/b8_optimizer
