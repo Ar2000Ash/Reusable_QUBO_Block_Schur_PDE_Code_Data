@@ -50,7 +50,7 @@ def factorize_fixed(name: str):
 
 
 def integrate_with_last_rhs(name, inverses, A):
-    """Same time integrators and original Dirichlet traces as pde_models.integrate.
+    """Time integrators and Dirichlet traces matching pde_models.integrate.
 
     Returns final RHS computed from the approximate trajectory to define the
     reported final *algebraic* residual, which cannot be A@x - b for time cases
