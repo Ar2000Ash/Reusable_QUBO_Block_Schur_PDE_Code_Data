@@ -254,10 +254,61 @@ def build_dirac3() -> None:
     _write(plot_summary, "dirac_plot_summary.csv")
 
 
+
+def build_multiscale_figure3() -> None:
+    """Derive the new Figure 3 and Table 3 from fresh, independently rerunnable data.
+
+    Historical data/raw/fixed_validation remains immutable. The control comes
+    from the separately rerun single-grid experiment, NOT the historical run.
+    """
+    reconstruction = ROOT / "experimental_reconstruction"
+    source = reconstruction / "outputs"
+    new = pd.read_csv(source / "figure3_multiscale.csv")
+    fixed = pd.read_csv(source / "figure3_fixed_paper_scales.csv")
+    order = ["heat_1d", "burgers_1d", "poisson_2d", "helmholtz_2d", "klein_gordon_1d"]
+    labels = ["Heat", "Burgers", "Poisson", "Helmholtz", "Klein--Gordon"]
+    assert new["pde"].tolist() == fixed["pde"].tolist() == order
+    assert new["calls"].sum() == 480
+    assert new["nonzero_correction_updates"].sum() == 360
+    assert new["clipped_continuous_corrections"].sum() == 0
+    assert (new["scale_policy"] == "gamma_p=gamma0/8**p").all()
+    assert (new["logical_bits_per_call"] == 24).all()
+
+    plot = pd.DataFrame({
+        "short": labels,
+        "rel_dense": new["rel_dense"],
+        "max_inv_res": new["max_inv_res"],
+        "baseline_rel_dense": fixed["rel_dense"],
+        "baseline_max_inv_res": fixed["max_inv_res"],
+    })
+    _write(plot, "figure3_multiscale_plot.csv")
+    _write(new, "figure3_multiscale_table.csv")
+
+    def sci_tex(value: float) -> str:
+        if value == 0:
+            return "$0$"
+        power = int(np.floor(np.log10(abs(float(value)))))
+        return f"\${float(value) / 10**power:.2f}\\times10^{{{power}}}\$".replace("\\$", "$")
+
+    rows = []
+    for r in new.to_dict("records"):
+        row = [
+            str(r["label"]), f'{float(r["gamma0"]):.2f}', str(int(r["N"])),
+            f'{float(r["cond_A"]):.2f}', sci_tex(r["rel_dense"]),
+            sci_tex(r["r_inf"]), sci_tex(r["max_inv_res"]),
+            f'{float(r["max_schur_cond"]):.2f}',
+            f'{int(r["calls"])} / {int(r["nonzero_correction_updates"])}',
+        ]
+        rows.append(" & ".join(row) + r" \\")
+    (OUT / "table3_multiscale_rows.tex").write_text("\n".join(rows) + "\n", encoding="utf-8")
+
+
+
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     build_k_sweep()
     build_fixed_validation()
+    build_multiscale_figure3()
     build_large_block()
     build_b8_optimizer()
     build_dirac3()
