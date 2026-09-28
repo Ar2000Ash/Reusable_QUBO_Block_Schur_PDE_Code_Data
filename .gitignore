@@ -5,8 +5,8 @@ __pycache__/
 venv/
 .env
 
-# Experiment outputs regenerated locally
-outputs/
+# Experiment outputs regenerated locally (repository root only)
+/outputs/
 
 # Editor / operating-system noise
 .DS_Store
