@@ -1,7 +1,5 @@
 # Reusable QUBO-Derived Block-Schur Inverse Factors for Fixed-Operator PDE Solvers
 
-[![Reproducibility](https://github.com/Ar2000Ash/Reusable_QUBO_Block_Schur_PDE_Code_Data/actions/workflows/reproduce.yml/badge.svg)](https://github.com/Ar2000Ash/Reusable_QUBO_Block_Schur_PDE_Code_Data/actions)
-
 Source code, numerical records, and plotting data accompanying the paper *Reusable QUBO-Derived Block-Schur Inverse Factors for Fixed-Operator Finite-Difference PDE Solvers*.
 
 The offline calculation solves compact least-squares QUBOs for columns of local Schur inverses. These columns are decoded and cached. Each subsequent right-hand side is treated by ordinary classical block forward/backward substitution. The five-PDE validation uses four finite-grid optimizations per inverse column with the predetermined scale `gamma_p = gamma0 / 8**p` for `p = 0, 1, 2, 3`.
