@@ -165,17 +165,62 @@ No API keys, access tokens, or account credentials are included.
 
 ---
 
-## Regenerating the plots
+## Regeneration guide: new manuscript and archived evidence
 
-All supplied result figures are generated from `data/processed/`:
+Run these from this package directory after `pip install -r requirements.txt`.
+
+**Recompute the new Figure 3/Table 3 from the PDEs and exact CPU finite-grid oracle** (not a replay of the historical GPU experiment):
 
 ```bash
+python experimental_reconstruction/src/figure3_fixed_paper_scales.py
+python experimental_reconstruction/src/figure3_multiscale.py
+python experimental_reconstruction/tests/check_figure3_multiscale.py
+python experimental_reconstruction/tests/check_figure3_multiscale_outputs.py
+python analysis/build_processed_data.py
 python analysis/generate_figures.py
 ```
 
-The script uses LaTeX text rendering when a local LaTeX installation is available and a
-serif/STIX fallback otherwise.  The source data for each panel are documented in
-[`docs/FIGURES.md`](docs/FIGURES.md).
+The new manuscript Table 3 is `data/processed/table3_multiscale_rows.tex` (numerical source: `data/processed/figure3_multiscale_table.csv`), and its pgfplots input is `data/processed/figure3_multiscale_plot.csv`. `figures/figure_03_five_pde_validation.png` now compares the fresh multiscale experiment with the **separately rerun** single-grid control. The immutable historical Table 3 source remains `data/raw/fixed_validation/summary.csv`; `data/processed/fixed_validation.csv` and `fixed_plot.csv` are archival processed views, **not** inputs to the new Figure 3. The auxiliary ground-truth, per-stage and LaTeX renderings are produced by `python experimental_reconstruction/src/render_figure3_multiscale.py`.
+
+**Independently regenerate the Figure 2 numerical sweep:**
+
+```bash
+python experimental_reconstruction/tests/check_figure2.py
+python experimental_reconstruction/run_driver.py figure2
+```
+
+**Rerun the underlying Table 4 and Table 5 numerical experiments:**
+
+```bash
+python experiments/run_large_block.py
+python experiments/run_b8_optimizer.py
+```
+
+These scripts write freshly rerun outputs in `outputs/` rather than overwriting `data/raw/`. The standard main plotting pipeline uses archived source rows for Figures 2, 4 and 5 unless those new experiment outputs are explicitly reconciled and promoted.
+
+**Regenerate all manuscript plotting derivatives and verify the archived values:**
+
+```bash
+python analysis/build_processed_data.py
+python analysis/verify_results.py
+python analysis/generate_figures.py
+```
+
+This produces Figures 2–7; Figure 3 uses the new separate experiment, whereas Figures 2, 4, 5–7 use the archived outputs. The historical 24-bit original CUDA timing and original `auto_bound` implementation are **not** reconstructed by this command. The new exact CPU oracle uses an analytically reduced search, so `calls*2**24` is a logical search-space count rather than visited-state or timing measurement. The new general CUDA QUBO-array solver is a separate optional API and is not the Figure 3 backend.
+
+**Rebuild and audit stored QCI hardware results without resubmitting jobs:**
+
+```bash
+python analysis/check_qci_input_qubos.py
+python analysis/reconstruct_dirac3_pde.py --write
+python analysis/check_dirac3_decode.py
+python analysis/audit_dirac3.py
+python analysis/verify_qci_recovery.py
+```
+
+These use recorded hardware bitstrings and archived Schur data. They do not run the Dirac-3 device or reconstruct missing transient forcing/time histories. The representative input polynomial CSVs are mathematical reconstructions, not recovered original uploaded file bytes.
+
+The figure source map is in [`docs/FIGURES.md`](docs/FIGURES.md); journal-style plots use a serif/STIX fallback when LaTeX is not installed.
 
 ---
 
