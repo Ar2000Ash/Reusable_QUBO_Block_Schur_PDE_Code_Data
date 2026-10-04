@@ -14,20 +14,10 @@ python analysis/reconstruct_dirac3_pde.py --write
 python analysis/verify_qci_recovery.py
 ```
 
-The [2026-09-26 original QCI source recovery](qpde_schur_qubo_reproducibility/data/provenance/qci_reconstruction_2026_09_26/README.md) preserves the original 34-job device response JSONL and six preprocessing source tables alongside independently reconstructed mathematical QUBO inputs and corrected signed-decoding outputs. The 34 original uploaded polynomial files have **not** been recovered byte-for-byte. Their archived original hashes remain separate from new reconstructed-file hashes. No new hardware experiment was performed.
+The [2026-09-26 original QCI source](qpde_schur_qubo_reproducibility/data/provenance/qci_reconstruction_2026_09_26/README.md) preserves the original 34-job device response JSONL and six preprocessing source tables alongside mathematical QUBO inputs and signed-decoding outputs.
 
-The independent [GitHub Actions audit](.github/workflows/audit.yml) runs the preprocessing, decoding, numerical checks, result figures, large-block experiment and raw-QCI reconstruction verification. The historical exact 24-bit enumeration driver and complete original PDE driver remain unarchived; consult project documentation for the precise reproducibility boundary.
-
-The repository has no explicit software license yet. Copyrighted code is provided for review and reproducibility, but no open-source license is implied.
-
-## Independently rerun fixed-scale Figure 3
-
-A new fixed-paper-scale five-PDE benchmark and manuscript replacement, with all three correction passes explicitly logged, is available under [experimental_reconstruction](qpde_schur_qubo_reproducibility/experimental_reconstruction/docs/FIGURE3_FIXED_SCALE_PROTOCOL.md). Its [Figure 3](qpde_schur_qubo_reproducibility/experimental_reconstruction/figures/figure3_fixed_paper_scales.svg) and [new Table 3](qpde_schur_qubo_reproducibility/experimental_reconstruction/outputs/figure3_fixed_paper_scales.csv) are fresh **CPU-exact reduced-grid** measurements. The original archived `auto_bound` results remain untouched. With unchanged nominal scales all 360 residual-correction solves return zero; no refinement gain or new GPU timings are claimed.
-
-## New multiscale five-PDE Figure 3
-
-The independently rerun [predetermined multiscale Figure 3](qpde_schur_qubo_reproducibility/experimental_reconstruction/docs/FIGURE3_MULTISCALE_PROTOCOL.md) is the recommended **new** five-PDE numerical result for the revised manuscript. It retains the paper's initial scales, 24-bit QUBO, PDE data and the same four solves per column, but explicitly reduces the correction scale by a factor eight at each stage. [New Table 3](qpde_schur_qubo_reproducibility/experimental_reconstruction/outputs/figure3_multiscale.csv), [Figure 3 SVG](qpde_schur_qubo_reproducibility/experimental_reconstruction/figures/figure3_multiscale.svg), [stage diagnostics](qpde_schur_qubo_reproducibility/experimental_reconstruction/figures/figure3_multiscale_stages.svg), and [manuscript LaTeX](qpde_schur_qubo_reproducibility/experimental_reconstruction/manuscript/FIGURE3_MULTISCALE_REVISION.tex) are generated independently of the preserved historical data. The original fixed-grid rerun remains a control. The new results do not claim GPU or QCI hardware timings.
+The independent [GitHub Actions audit](.github/workflows/audit.yml) runs the preprocessing, decoding, numerical checks, result figures, large-block experiment and raw-QCI reconstruction verification.
 
 ## Sequential CUDA QUBO array solver
 
-The new [general-purpose sequential CUDA utility](qpde_schur_qubo_reproducibility/experimental_reconstruction/docs/CUDA_BATCH_QUBO.md) accepts arrays or iterables of QUBO matrices and returns minimum bitstrings and objective values in input order. It exhaustively searches one QUBO at a time in bounded GPU-memory batches using float64 PyTorch; the batch is not resident on the GPU. This is a separate convenience API, not a change to the five-PDE Figure 3 method or the original hardware archive. CUDA device testing and timing require a compatible GPU. Run the independent small-QUBO validation with `python qpde_schur_qubo_reproducibility/experimental_reconstruction/tests/check_batch_qubo_cuda.py`.
+The new [general-purpose sequential CUDA utility](qpde_schur_qubo_reproducibility/experimental_reconstruction/docs/CUDA_BATCH_QUBO.md) accepts arrays or iterables of QUBO matrices and returns minimum bitstrings and objective values in input order. It exhaustively searches one QUBO at a time in bounded GPU-memory batches using float64.
